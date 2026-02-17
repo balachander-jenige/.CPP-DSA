@@ -12,12 +12,11 @@ func subarraysDivByK(nums []int, k int) int {
         if rem <0 {
             rem = rem +k
         }
-
         if freq, exists := reminder[rem]; exists{
             count += freq
         }
 
-        reminder[rem % k] +=1
+        reminder[rem] +=1
     }    
 
     return count
