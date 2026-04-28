@@ -1,11 +1,23 @@
 func insert(intervals [][]int, newInterval []int) [][]int {
-
-    intervals = append(intervals, newInterval)
-    
-    sort.Slice(intervals, func(i,j int)bool {
-        return intervals[i][0] < intervals[j][0]
-    })
+    if len(intervals) == 0 {
+        return [][]int{newInterval}
+    }
+    //Inserting at interval
     var result [][]int;
+    inserterd := false
+    for i:=0 ;i<len(intervals);i++{
+        if (!inserterd && intervals[i][0] > newInterval[0]){
+            result = append(result, newInterval)
+            inserterd = true
+        }
+        result = append(result,intervals[i])
+    }
+    if !inserterd{
+        result = append(result,newInterval)
+    }
+
+    intervals = result
+    result = [][]int{} 
     start1 := intervals[0][0]
     end1   := intervals[0][1]    
    
