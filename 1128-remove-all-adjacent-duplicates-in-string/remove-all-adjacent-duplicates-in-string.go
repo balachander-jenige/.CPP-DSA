@@ -1,15 +1,15 @@
-
 func removeDuplicates(s string) string {
-    result := []rune{}
+	stack := []byte{}
 
-    for _, Value := range s{
-        
-        if len(result) >0 &&  Value == result[len(result)-1]{
-            result = result[:len(result)-1]
-        }else{
-            result = append(result, Value)
-        }
-    }
-    return string(result)
-    
+	for i := 0; i < len(s); i++ {
+		ch := s[i]
+
+		if len(stack) > 0 && stack[len(stack)-1] == ch {
+			stack = stack[:len(stack)-1]
+		} else {
+			stack = append(stack, ch)
+		}
+	}
+
+	return string(stack)
 }
