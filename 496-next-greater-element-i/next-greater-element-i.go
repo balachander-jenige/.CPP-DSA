@@ -1,32 +1,51 @@
 func nextGreaterElement(nums1 []int, nums2 []int) []int {
 
-    m := make(map[int]int)
-    res := make([]int, len(nums2))
-    st := []int{}
-    finalres := []int{}
+    // Map to store:
+    // key   -> element from nums2
+    // value -> next greater element
+    nextGreater := make(map[int]int)
 
-    // store index of nums2 elements
-    for i, v := range nums2 {
-        m[v] = i
-    }
-    res[len(nums2)-1] = -1
-    st= append(st,nums2[len(nums2)-1])
-    for i := len(nums2)-2 ; i>=0 ; i--{
-        for (len(st)!=0 && nums2[i] >= st[len(st)-1]){
-            st = st[:len(st)-1]
+    // Monotonic decreasing stack
+    // Stores elements from nums2
+    stack := []int{}
+
+    // Traverse nums2 from right to left
+    for i := len(nums2) - 1; i >= 0; i-- {
+
+        // Remove all smaller or equal elements
+        // because they cannot be the next greater element
+        for len(stack) > 0 && nums2[i] >= stack[len(stack)-1] {
+
+            // Pop from stack
+            stack = stack[:len(stack)-1]
         }
-        if (len(st)==0){
-            res[i]=-1
-        }else{
-            res[i] = st[len(st)-1]
+
+        // If stack is empty,
+        // no greater element exists on right side
+        if len(stack) == 0 {
+
+            nextGreater[nums2[i]] = -1
+
+        } else {
+
+            // Top of stack is the next greater element
+            nextGreater[nums2[i]] = stack[len(stack)-1]
         }
-        st = append(st, nums2[i])
+
+        // Push current element into stack
+        stack = append(stack, nums2[i])
     }
 
-   for _, value := range nums1{
-     i := m[value]
-     v1 := res[i]
-     finalres = append(finalres, v1)
-   }
-    return finalres
+    // Result array for nums1
+    res := make([]int, len(nums1))
+
+    // Fetch answers for nums1 elements
+    for i, v := range nums1 {
+
+        // Directly get next greater element from map
+        res[i] = nextGreater[v]
+    }
+
+    // Return final answer
+    return res
 }
