@@ -1,5 +1,5 @@
 type Pair struct {
-    ch    rune
+    ch    byte
     count int
 }
 
@@ -31,10 +31,10 @@ func removeDuplicates(s string, k int) string {
     var st Stack
 
     // traverse each character
-    for _, ch := range s {
+    for i, _ := range s {
 
         // if stack not empty and same character
-        if !st.empty() && st.top().ch == ch {
+        if !st.empty() && st.top().ch == s[i] {
 
             // increase frequency
             st.data[len(st.data)-1].count++
@@ -48,7 +48,7 @@ func removeDuplicates(s string, k int) string {
 
             // push new character with count 1
             st.push(Pair{
-                ch:    ch,
+                ch:    s[i],
                 count: 1,
             })
         }
