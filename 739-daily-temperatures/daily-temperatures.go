@@ -1,37 +1,46 @@
+type Stack struct {
+    data []int
+}
+
+// push element into stack
+func (s *Stack) push(val int) {
+    s.data = append(s.data, val)
+}
+
+// pop element from stack
+func (s *Stack) pop() {
+    s.data = s.data[:len(s.data)-1]
+}
+
+// get top element
+func (s *Stack) top() int {
+    return s.data[len(s.data)-1]
+}
+
+// check if stack is empty
+func (s *Stack) empty() bool {
+    return len(s.data) == 0
+}
 func dailyTemperatures(temp []int) []int {
 
-    // Result array to store number of days until a warmer temperature
     res := make([]int, len(temp))
 
-    // Map to store last seen index of each temperature value
-    m := make(map[int]int)
+    st := Stack{data: []int{}}
 
-    // Stack to store temperatures (not indexes in this version)
-    st := []int{}
-
-    // Traverse the temperature array from right to left
     for i := len(temp) - 1; i >= 0; i-- {
 
-        // Pop elements from stack while current temperature
-        // is greater or equal to stack top temperature
-        for len(st) > 0 && temp[i] >= st[len(st)-1] {
-            st = st[:len(st)-1]
+        // maintain monotonic decreasing stack
+        for !st.empty() && temp[i] >= temp[st.top()] {
+            st.pop()
         }
 
-        // If no warmer temperature exists to the right
-        if len(st) == 0 {
+        if st.empty() {
             res[i] = 0
         } else {
-            // Use map to get index of next warmer temperature
-            // and compute difference in days
-            res[i] = m[st[len(st)-1]] - i
+            res[i] = st.top() - i
         }
 
-        // Push current temperature into stack
-        st = append(st, temp[i])
-
-        // Store index of current temperature
-        m[temp[i]] = i
+        st.push(i)
     }
 
     return res
