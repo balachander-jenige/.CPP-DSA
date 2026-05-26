@@ -1,48 +1,33 @@
 func maxNumberOfBalloons(text string) int {
-
+    //optimized version 
     // Target word
     word := "balloon"
-
-    // Store character frequencies from text
+    // Count characters available in text
     have := make(map[rune]int)
 
-    // Store required frequencies for "balloon"
+    // Count characters needed for word
     need := make(map[rune]int)
 
-    count := 0
-    boolean := true
-
-    // Count characters available in text
-    for _, v := range text {
-        have[v]++
+    for _, c := range text {
+        have[c]++
     }
 
-    // Count characters needed for "balloon"
-    for _, v := range word {
-        need[v]++
+    for _, c := range word {
+        need[c]++
     }
 
-    // Keep forming "balloon" until impossible
-    for boolean {
+    // Large initial value
+    ans := int(^uint(0) >> 1)
 
-        // Check every required character
-        for k, v := range need {
+    // Find minimum possible formations
+    for ch, freq := range need {
 
-            // Not enough characters available
-            if v > have[k] || have[k] == 0 {
-                boolean = false
-                break
-            }
+        possible := have[ch] / freq
 
-            // Use required characters
-            have[k] -= v
-        }
-
-        // Successfully formed one "balloon"
-        if boolean {
-            count++
+        if possible < ans {
+            ans = possible
         }
     }
 
-    return count
+    return ans
 }
